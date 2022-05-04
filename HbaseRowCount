@@ -32,4 +32,7 @@ Output:
 
 You can use the count method in hbase to count the no of rows. However, counting rows of large table will be time consuming work. 
 
-Note: When running MR job, Please keep a close watch on region server latency, it will degrade the Hbase performance especially when taking count for larger tables as it will be taking no of mappers equal to no of regions in hbase table, imagine if you are running a counter job for  hbase table having 500 regions. 
+Note: When running MR job, Please keep a close watch on region server latency, 
+it will degrade the Hbase performance, especially when taking count for larger tables 
+as it will be taking no of mappers equal to no of regions in hbase table, just 
+imagine if you are running a counter job for  hbase table having 500 regions. 
