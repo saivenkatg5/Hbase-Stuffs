@@ -1,0 +1,35 @@
+Today, I received a requirement from the dev team where I had to take a row count of 3 big tables on Hbase approx size would be in TB. 
+
+I have followed the below approach to get the row count of the HBase table. 
+
+Scenario #1
+
+If the HBase table size is small then login to the HBase shell with a valid user and execute
+
+nohup echo "count 'table1'/log,INTERVAL => 100000" | hbase shell >> /tmp/table1.log &
+
+
+
+Scenario #2
+
+If HBase table size is large, then execute the inbuilt RowCounter map-reduce job: Log in to the Hadoop machine with a valid user and execute:
+
+nohup hbase org.apache.hadoop.hbase.mapreduce.RowCounter 'table1' >> /tmp/table1.log &
+
+Output:
+
+   ....
+     ....
+     ....
+     Virtual memory (bytes) snapshot=22594633728
+                Total committed heap usage (bytes)=5093457920
+        org.apache.hadoop.hbase.mapreduce.RowCounter$RowCounterMapper$Counters
+                ROWS=6
+        File Input Format Counters
+                Bytes Read=0
+        File Output Format Counters
+                Bytes Written=0
+
+You can use the count method in hbase to count the no of rows. However, counting rows of large table will be time consuming work. 
+
+Note: When running MR job, Please keep a close watch on region server latency, it will degrade the Hbase performance especially when taking count for larger tables as it will be taking no of mappers equal to no of regions in hbase table, imagine if you are running a counter job for  hbase table having 500 regions. 
